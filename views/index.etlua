@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Todos</title>
+</head>
+<body>
+  <h1>Todos</h1>
+
+  <% if form_error then %>
+    <p><%= form_error %></p>
+  <% end %>
+
+  <form method="POST" action="/todos">
+    <input type="hidden" name="csrf_token" value="<%= csrf_token %>">
+    <input type="text" name="title" maxlength="<%= title_max %>">
+    <button type="submit">Add</button>
+  </form>
+
+  <ul>
+    <% for _, todo in ipairs(todos) do %>
+      <li>
+        <form method="POST" action="/todos/<%= todo.id %>">
+          <input type="hidden" name="csrf_token" value="<%= csrf_token %>">
+          <input type="text" name="title" value="<%= todo.title %>" maxlength="<%= title_max %>">
+          <label>
+            <input type="checkbox" name="done" value="1" <% if todo.done then %>checked<% end %>>
+            done
+          </label>
+          <button type="submit">Save</button>
+        </form>
+
+        <form method="POST" action="/todos/<%= todo.id %>/delete">
+          <input type="hidden" name="csrf_token" value="<%= csrf_token %>">
+          <button type="submit">Delete</button>
+        </form>
+      </li>
+    <% end %>
+  </ul>
+</body>
+</html>
